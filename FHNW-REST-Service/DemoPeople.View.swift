@@ -12,9 +12,16 @@ struct DemoPeopleView: View {
             Text("User").font(.largeTitle)
             Divider()
             ScrollView {
-                LazyVStack {
+                LazyVStack(alignment: .leading) {
                     ForEach(viewModel.users) { user in
                         Text(user.name).font(.headline)
+                            .padding()
+                            .background(
+                                Color.white
+
+                                    .shadow(radius: 4)
+                            )
+                            .padding()
                     }
                 }
             }
