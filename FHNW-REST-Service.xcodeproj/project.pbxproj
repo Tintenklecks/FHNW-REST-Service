@@ -8,17 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		B67A2FE62B0E996700E3AF7E /* FHNW_REST_ServiceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67A2FE52B0E996700E3AF7E /* FHNW_REST_ServiceApp.swift */; };
-		B67A2FE82B0E996700E3AF7E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67A2FE72B0E996700E3AF7E /* ContentView.swift */; };
+		B67A2FE82B0E996700E3AF7E /* DemoPeople.View.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67A2FE72B0E996700E3AF7E /* DemoPeople.View.swift */; };
 		B67A2FEA2B0E996800E3AF7E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B67A2FE92B0E996800E3AF7E /* Assets.xcassets */; };
 		B67A2FED2B0E996800E3AF7E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B67A2FEC2B0E996800E3AF7E /* Preview Assets.xcassets */; };
+		B67A2FF42B0E9ACA00E3AF7E /* DemoPeople.ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67A2FF32B0E9ACA00E3AF7E /* DemoPeople.ViewModel.swift */; };
+		B67A2FF62B0E9AD700E3AF7E /* DemoPeople.Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67A2FF52B0E9AD700E3AF7E /* DemoPeople.Model.swift */; };
+		B67A2FF82B0E9AE500E3AF7E /* REST-Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67A2FF72B0E9AE500E3AF7E /* REST-Service.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B67A2FE22B0E996700E3AF7E /* FHNW-REST-Service.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FHNW-REST-Service.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B67A2FE52B0E996700E3AF7E /* FHNW_REST_ServiceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FHNW_REST_ServiceApp.swift; sourceTree = "<group>"; };
-		B67A2FE72B0E996700E3AF7E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B67A2FE72B0E996700E3AF7E /* DemoPeople.View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoPeople.View.swift; sourceTree = "<group>"; };
 		B67A2FE92B0E996800E3AF7E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B67A2FEC2B0E996800E3AF7E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		B67A2FF32B0E9ACA00E3AF7E /* DemoPeople.ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DemoPeople.ViewModel.swift; path = ../../DemoPeople.ViewModel.swift; sourceTree = "<group>"; };
+		B67A2FF52B0E9AD700E3AF7E /* DemoPeople.Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoPeople.Model.swift; sourceTree = "<group>"; };
+		B67A2FF72B0E9AE500E3AF7E /* REST-Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "REST-Service.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +58,10 @@
 			isa = PBXGroup;
 			children = (
 				B67A2FE52B0E996700E3AF7E /* FHNW_REST_ServiceApp.swift */,
-				B67A2FE72B0E996700E3AF7E /* ContentView.swift */,
+				B67A2FE72B0E996700E3AF7E /* DemoPeople.View.swift */,
+				B67A2FF32B0E9ACA00E3AF7E /* DemoPeople.ViewModel.swift */,
+				B67A2FF52B0E9AD700E3AF7E /* DemoPeople.Model.swift */,
+				B67A2FF72B0E9AE500E3AF7E /* REST-Service.swift */,
 				B67A2FE92B0E996800E3AF7E /* Assets.xcassets */,
 				B67A2FEB2B0E996800E3AF7E /* Preview Content */,
 			);
@@ -137,8 +146,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B67A2FE82B0E996700E3AF7E /* ContentView.swift in Sources */,
+				B67A2FE82B0E996700E3AF7E /* DemoPeople.View.swift in Sources */,
 				B67A2FE62B0E996700E3AF7E /* FHNW_REST_ServiceApp.swift in Sources */,
+				B67A2FF62B0E9AD700E3AF7E /* DemoPeople.Model.swift in Sources */,
+				B67A2FF42B0E9ACA00E3AF7E /* DemoPeople.ViewModel.swift in Sources */,
+				B67A2FF82B0E9AE500E3AF7E /* REST-Service.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

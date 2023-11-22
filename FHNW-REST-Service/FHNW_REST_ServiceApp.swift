@@ -6,7 +6,7 @@ import SwiftUI
 struct FHNW_REST_ServiceApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            DemoPeopleView()
         }
     }
 }
