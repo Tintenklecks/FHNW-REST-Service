@@ -8,12 +8,12 @@ extension DemoPeopleView {
 
         // MARK: Internal
 
-        var url: URL? {
+        var url: URL {
             switch self {
             case .users:
-                URL(string: "https://jsonplaceholder.typicode.com/users")
+                URL(string: "https://jsonplaceholder.typicode.com/users")!
             case .todo:
-                URL(string: "https://jsonplaceholder.typicode.com/todos")
+                URL(string: "https://jsonplaceholder.typicode.com/todos")!
             }
         }
     }
@@ -26,11 +26,15 @@ extension DemoPeopleView {
     }
     
     class Model {
-        let restService = RestService()
 
-        func load(method: HTTPMethod, url: URL) {
+        func load(completion: (Data)->Void) {
+            
+            let method = HTTPMethod.get
+            let url = JSONPlaceholderAPI.users.url
+            
             var request = URLRequest(url: url)
             request.httpMethod = method.rawValue
+            
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let error {
                     print(error.localizedDescription)
@@ -49,6 +53,8 @@ extension DemoPeopleView {
                     print("Data is empty")
                     return
                 }
+                
+                
             }
         }
     }
