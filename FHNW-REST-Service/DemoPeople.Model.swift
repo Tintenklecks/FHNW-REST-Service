@@ -26,6 +26,11 @@ extension DemoPeopleView {
 
                 completion(users)
             }
+
+            service.load(method: .get, url: JSONPlaceholderAPI.todo.url) { data in
+                let todos = try! JSONDecoder().decode(Todos.self, from: data)
+                print(todos)
+            }
         }
     }
 }

@@ -32,3 +32,15 @@ struct Company: Codable {
 }
 
 typealias Users = [User]
+
+// MARK: - TODO Structure
+
+// MARK: - Todo
+struct Todo: Codable {
+    let userId, id: Int
+    let title: String
+    let completed: Bool
+
+}
+
+typealias Todos = [Todo]
