@@ -21,14 +21,10 @@ extension DemoPeopleView {
     class Model {
         func load(completion: @escaping (Users) -> Void) {
             let service = RestService()
-            service.load(method: .get, url: JSONPlaceholderAPI.users.url) { data in
-                let users = try! JSONDecoder().decode(Users.self, from: data)
-
+            service.load(method: .get, url: JSONPlaceholderAPI.users.url, convertTo: Users.self) { users in
                 completion(users)
             }
-
-            service.load(method: .get, url: JSONPlaceholderAPI.todo.url) { data in
-                let todos = try! JSONDecoder().decode(Todos.self, from: data)
+            service.load(method: .get, url: JSONPlaceholderAPI.todo.url, convertTo: Todos.self) { todos in
                 print(todos)
             }
         }

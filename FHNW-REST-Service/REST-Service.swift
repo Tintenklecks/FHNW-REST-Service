@@ -14,16 +14,16 @@ enum HTTPMethod: String {
 // MARK: - RestService
 
 class RestService {
-    func load(method: HTTPMethod, url: URL, completion: @escaping (Data) -> Void) {
+    func load<T: Codable>(method: HTTPMethod, url: URL, convertTo type: T.Type, completion: @escaping (T) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
-        
+
         let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error {
                 print(error.localizedDescription)
                 return
             }
-            
+
             guard let response,
                   let statusCode = (response as? HTTPURLResponse)?.statusCode,
                   (200 ..< 300).contains(statusCode)
@@ -31,15 +31,19 @@ class RestService {
                 print("HTTP Status is NOT 2xx")
                 return
             }
-            
+
             guard let data else {
                 print("Data is empty")
                 return
             }
-            
-            completion(data)
+            guard let result = try? JSONDecoder().decode(type.self, from: data) else {
+                print("Data cant be converted")
+                return
+            }
+
+            completion(result)
         }
-        
+
         dataTask.resume()
     }
 }
