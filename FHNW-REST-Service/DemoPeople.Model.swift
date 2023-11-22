@@ -27,7 +27,7 @@ extension DemoPeopleView {
     
     class Model {
 
-        func load(completion: (Data)->Void) {
+        func load(completion: (Users)->Void) {
             
             let method = HTTPMethod.get
             let url = JSONPlaceholderAPI.users.url
@@ -53,6 +53,7 @@ extension DemoPeopleView {
                     print("Data is empty")
                     return
                 }
+                
                 
                 
             }
