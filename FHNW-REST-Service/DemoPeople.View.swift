@@ -9,6 +9,13 @@ struct DemoPeopleView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
+            if !viewModel.errorText.isEmpty {
+                HStack {
+                    Text(viewModel.errorText)
+                }
+                .padding(30)
+                .background(Color.red)
+            }
             Text("User").font(.largeTitle)
             Divider()
             ScrollView {
@@ -25,6 +32,10 @@ struct DemoPeopleView: View {
                     }
                 }
             }
+            .refreshable {
+                viewModel.update()
+            }
+
             Spacer()
         }
         .padding()
