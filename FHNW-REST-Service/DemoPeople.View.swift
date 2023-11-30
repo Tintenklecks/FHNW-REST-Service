@@ -33,14 +33,16 @@ struct DemoPeopleView: View {
                 }
             }
             .refreshable {
-                viewModel.update()
+                Task {
+                   await viewModel.update()
+                }
             }
 
             Spacer()
         }
         .padding()
-        .onAppear {
-            viewModel.update()
+        .task {
+           await viewModel.update()
         }
     }
 }

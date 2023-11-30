@@ -19,13 +19,14 @@ extension DemoPeopleView {
     }
 
     class Model {
-        
         func load() async throws -> Users {
             let service = RestService()
-            return try await service.load(method: .get, url: JSONPlaceholderAPI.users.url, convertTo: Users.self)
+            let users = try await service
+                .load(method: .get,
+                      url: JSONPlaceholderAPI.users.url,
+                      convertTo: Users.self)
+            return users
         }
-
-
 
         func load(completion: @escaping (Users) -> Void) {
             let service = RestService()
