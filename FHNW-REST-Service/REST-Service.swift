@@ -1,5 +1,3 @@
-// Created 22.11.2023
-
 import Foundation
 
 // MARK: - HTTPMethod
@@ -20,7 +18,7 @@ public enum NetworkError: Error, Equatable {
     case serverError(code: Int)
     case unableToParseData
     case thrownError(error: String)
-    
+
     // MARK: Public
 
     public var description: String {
@@ -35,53 +33,106 @@ public enum NetworkError: Error, Equatable {
     }
 }
 
+// MARK: - DataService
+
+protocol RestServiceProtocol {
+    var defaultHeader: [String: String] { get }
+    init(defaultHeader: [String: String])
+    func request<T: Codable>(
+        method: HTTPMethod,
+        url: String,
+        convertTo type: T.Type,
+        headers: [String: String]?,
+        urlParameter: [String: String]?,
+        queryParameter: [String: String]?,
+        body: Codable?) async throws -> T
+
+    func get<T: Codable>(
+        url: String,
+        convertTo type: T.Type,
+        urlParameter: [String: String]?,
+        queryParameter: [String: String]?) async throws -> T
+}
+
 // MARK: - RestService
 
-class RestService {
-    func load<T: Codable>(method: HTTPMethod, url: URL, convertTo type: T.Type) async throws -> T {
-        var request = URLRequest(url: url, timeoutInterval: 2)
+class RestService: RestServiceProtocol {
+    var defaultHeader: [String : String]
+    
+
+    required init(defaultHeader: [String: String] = [:]) {
+        self.defaultHeader = defaultHeader
+    }
+
+    func request<T: Codable>(
+        method: HTTPMethod,
+        url: String,
+        convertTo type: T.Type,
+        headers: [String: String]? = nil,
+        urlParameter: [String: String]? = nil,
+        queryParameter: [String: String]? = nil,
+        body: Codable? = nil) async throws -> T
+    {
+        var urlString = url
+
+        // Replace URL Path Parameters
+        urlParameter?.forEach { key, value in
+            urlString = urlString.replacingOccurrences(of: ":\(key)", with: value)
+        }
+
+        guard var requestURL = URL(string: urlString) else {
+            throw NetworkError.badURL
+        }
+
+        // Append URL Query Parameters
+        if let urlQueryParams = queryParameter {
+            var urlComponents = URLComponents(url: requestURL, resolvingAgainstBaseURL: false)
+            urlComponents?.queryItems = urlQueryParams.map { URLQueryItem(name: $0.key, value: $0.value) }
+            requestURL = urlComponents?.url ?? requestURL
+        }
+
+        var request = URLRequest(url: requestURL)
         request.httpMethod = method.rawValue
-        
-        let (data, response) = try await URLSession.shared.data(from: url)
+
+        // Set Default Header
+        for (key, value) in defaultHeader {
+            request.setValue(value, forHTTPHeaderField: key)
+        }
+
+        // short form:
+        // defaultHeader.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
+
+        // Set Headers
+        headers?.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
+
+        // Set JSON Body
+        if let body {
+            let jsonData = try JSONEncoder().encode(body)
+            request.httpBody = jsonData
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
+
+        let (data, response) = try await URLSession.shared.data(for: request)
         if let statusCode = (response as? HTTPURLResponse)?.statusCode,
            statusCode >= 300
         {
             throw NetworkError.serverError(code: statusCode)
         }
-        
-        return try JSONDecoder().decode(type.self, from: data)
+
+        // Decode the data stream to an instance of the datatype T
+        let instanceOfTType = try JSONDecoder().decode(type.self, from: data)
+        return instanceOfTType
     }
-    
-    func load<T: Codable>(method: HTTPMethod, url: URL, convertTo type: T.Type, completion: @escaping (T) -> Void) {
-        var request = URLRequest(url: url)
-        request.httpMethod = method.rawValue
-    
-        let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error {
-                print(error.localizedDescription)
-                return
-            }
-        
-            guard let response,
-                  let statusCode = (response as? HTTPURLResponse)?.statusCode,
-                  (200 ..< 300).contains(statusCode)
-            else {
-                print("HTTP Status is NOT 2xx")
-                return
-            }
-        
-            guard let data else {
-                print("Data is empty")
-                return
-            }
-            guard let result = try? JSONDecoder().decode(type.self, from: data) else {
-                print("Data cant be converted")
-                return
-            }
-        
-            completion(result)
-        }
-    
-        dataTask.resume()
+
+    func get<T: Codable>(
+        url: String,
+        convertTo type: T.Type,
+        urlParameter: [String: String]? = nil,
+        queryParameter: [String: String]? = nil) async throws -> T
+    {
+        try await request(method: .get,
+                          url: url, convertTo: T.self,
+                          urlParameter: urlParameter,
+                          queryParameter: queryParameter)
     }
 }
