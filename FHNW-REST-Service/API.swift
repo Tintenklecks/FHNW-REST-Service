@@ -31,6 +31,18 @@ enum JSONPlaceholderAPI {
             "https://jsonplaceholder.typicode.com/todos"
         }
     }
+    
+    var fileUrl: URL {
+        switch self {
+            
+        case .users:
+            Bundle.main.url(forResource: "demousers", withExtension: "json")!
+
+        default:
+            Bundle.main.url(forResource: "demousers", withExtension: "json")!
+
+        }
+    }
 
     var method: HTTPMethod {
         switch self {

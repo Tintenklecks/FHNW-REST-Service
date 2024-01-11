@@ -33,7 +33,7 @@ public enum NetworkError: Error, Equatable {
     }
 }
 
-// MARK: - DataService
+// MARK: - RestServiceProtocol
 
 protocol RestServiceProtocol {
     var defaultHeader: [String: String] { get }
@@ -54,11 +54,43 @@ protocol RestServiceProtocol {
         queryParameter: [String: String]?) async throws -> T
 }
 
+// MARK: - LocalJsonService
+
+class LocalJsonService: RestServiceProtocol {
+    var defaultHeader: [String: String]
+
+    required init(defaultHeader: [String: String] = [:]) {
+        self.defaultHeader = defaultHeader
+    }
+
+    func request<T>(method: HTTPMethod, url: String, convertTo type: T.Type, headers: [String: String]?, urlParameter: [String: String]?, queryParameter: [String: String]?, body: Codable?) async throws -> T where T: Decodable, T: Encodable {
+        guard method == HTTPMethod.get else {
+            throw NetworkError.thrownError(error: "Falsche Methoide")
+        }
+
+        guard let lastComponent = url.split(separator: "/").last else {
+            throw NetworkError.thrownError(error: "Something else")
+        }
+
+        guard let url = Bundle.main.url(forResource: String(lastComponent), withExtension: "json"),
+              let data = try? Data(contentsOf: url)
+        else {
+            throw NetworkError.thrownError(error: "Data kaputt")
+        }
+
+        let instanceOfTType = try JSONDecoder().decode(type.self, from: data)
+        return instanceOfTType
+    }
+
+    func get<T>(url: String, convertTo type: T.Type, urlParameter: [String: String]?, queryParameter: [String: String]?) async throws -> T where T: Decodable, T: Encodable {
+        try await request(method: .get, url: url, convertTo: type.self, headers: nil, urlParameter: nil, queryParameter: nil, body: nil)
+    }
+}
+
 // MARK: - RestService
 
 class RestService: RestServiceProtocol {
-    var defaultHeader: [String : String]
-    
+    var defaultHeader: [String: String]
 
     required init(defaultHeader: [String: String] = [:]) {
         self.defaultHeader = defaultHeader

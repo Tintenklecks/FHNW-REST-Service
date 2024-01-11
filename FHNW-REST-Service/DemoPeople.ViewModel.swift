@@ -6,7 +6,12 @@ extension DemoPeopleView {
     class ViewModel: ObservableObject {
         @Published var users: Users = []
         @Published var errorText: String = ""
-        var model = Model()
+        var model: Model
+
+        
+        init(restService: RestServiceProtocol) {
+            model = Model(restService: restService)
+        }
 
         func update() async {
             do {

@@ -5,7 +5,7 @@ import SwiftUI
 // MARK: - DemoPeopleView
 
 struct DemoPeopleView: View {
-    @StateObject var viewModel = ViewModel()
+    @StateObject var viewModel = ViewModel(restService: RestService())
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -52,12 +52,7 @@ struct DemoPeopleView: View {
 extension User: Identifiable {}
 
 #Preview {
-    let url = Bundle.main.url(forResource: "demousers", withExtension: "json")!
-
-    let data = try! Data(contentsOf: url)
-    let users = try! JSONDecoder().decode(Users.self, from: data)
-    let viewModel = DemoPeopleView.ViewModel()
-    viewModel.users = users
+    let viewModel = DemoPeopleView.ViewModel(restService: LocalJsonService())
 
     return DemoPeopleView(viewModel: viewModel)
 }
